@@ -9,7 +9,7 @@ const PlayerContextProvider= (props)=>{
     const seekBg= useRef()
     const seekBar= useRef()
 
-    const [track, setTrack]= useState(songsData[0])
+    const [track, setTrack]= useState(songsData[0]) //Set the song 
     const [playStatus, setPlayStatus]= useState(false)
     const [time, setTime]= useState({
         currentTime: {
@@ -32,6 +32,13 @@ const PlayerContextProvider= (props)=>{
         setPlayStatus(false)
     }
 
+    const playWithId= async (id)=>{
+        await setTrack(songsData[id])
+        await audioRef.current.play() // In modern browser play gives a promise so we need to await
+        setPlayStatus(true)
+    }
+
+    // audio will not be available immediately so we put setTimeout here which will ensure audio loads 
     useEffect(()=>{
         setTimeout(()=>{
             audioRef.current.ontimeupdate= ()=>{
@@ -57,7 +64,8 @@ const PlayerContextProvider= (props)=>{
         track,setTrack,
         playStatus,setPlayStatus,
         time,setTime,
-        play,pause
+        play,pause,
+        playWithId
     }
 
     return (
